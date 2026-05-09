@@ -28,7 +28,16 @@ def get_towers():
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     # fetching the cell towers (converted geometry to GeoJSON-friendly format)
-    cur.execute("SELECT node_name, ip_address, ST_AsText(location) FROM cell_towers;")
+    query = """
+        SELECT 
+            node_name, 
+            ip_address, 
+            status, 
+            ST_Y(location) as lat, 
+            ST_X(location) as lng 
+        FROM cell_towers;
+    """
+    cur.execute(query)
     towers = cur.fetchall()
     cur.close()
     conn.close()

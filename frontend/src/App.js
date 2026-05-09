@@ -17,7 +17,7 @@ function App() {
 
   // fetch towers from postgreSQL db
   useEffect(() => {
-    fetch("https://localhost:5000/api/towers")
+    fetch("http://localhost:5000/api/towers")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched towers:", data);
@@ -41,15 +41,17 @@ function App() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {towers.map((tower, idx) => {
-          <Marker key={idx} position={[tower.location]}>
+        {towers.map((tower, idx) => (
+          <Marker key={idx} position={[tower.lat, tower.lng]}>
             <Popup>
               <strong>{tower.node_name}</strong>
               <br />
+              Status: {tower.status}
+              <br />
               IP: {tower.ip_address}
             </Popup>
-          </Marker>;
-        })}
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
